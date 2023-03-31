@@ -5,7 +5,6 @@ import (
 	"github.com/weimob-tech/go-project-base/pkg/hook"
 	httpBase "github.com/weimob-tech/go-project-base/pkg/http"
 	logBase "github.com/weimob-tech/go-project-base/pkg/wlog"
-	codecBoot "github.com/weimob-tech/go-project-boot/pkg/codec"
 	"github.com/weimob-tech/go-project-boot/pkg/config"
 	httpBoot "github.com/weimob-tech/go-project-boot/pkg/http"
 	"github.com/weimob-tech/go-project-boot/pkg/wcontext"
@@ -64,7 +63,6 @@ func defaultConfigure() *configure {
 		SetupContainer:  wcontext.Setup,
 		AfterSetup:      func() {},
 		NewClient:       defaultClientCreator,
-		NewCodec:        codecBoot.SetupDefault,
 		PreStarterHook:  defaultPreStartHook,
 		PostStarterHook: defaultPostStartHook,
 	}
@@ -129,12 +127,6 @@ func ConfigureHttpServer(opts ...ServerOption) Option {
 func WithStarter(starter ...BlockingStarter) Option {
 	return func(c *configure) {
 		c.BlockingStarters = append(c.BlockingStarters, starter...)
-	}
-}
-
-func WithCodec() Option {
-	return func(c *configure) {
-		c.NewCodec = codecBoot.SetupDefault
 	}
 }
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"github.com/weimob-tech/go-project-base/pkg/config"
+	"github.com/weimob-tech/go-project-boot/pkg/wlog"
 )
 
 var store *viperStore
@@ -22,19 +23,31 @@ func Setup() {
 
 	name := "application"
 	env := v.GetString("env")
-	if len(env) > 0 {
-		name = fmt.Sprintf("%s-%s", name, env)
-	}
+	v.AutomaticEnv()
 
+	// read application
 	v.SetConfigName(name)
-	v.SetConfigType("properties")
 	v.AddConfigPath(".")
 	v.AddConfigPath("./configs")
+	v.AddConfigPath("./cmd/configs")
 	err := v.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("fatal error configs file: %w", err))
 	}
-	v.AutomaticEnv()
+	// read env application
+	if len(env) > 0 {
+		name = fmt.Sprintf("%s-%s", name, env)
+		v.SetConfigName(name)
+		err = v.MergeInConfig()
+		if err != nil {
+			switch err.(type) {
+			case viper.ConfigFileNotFoundError:
+				wlog.W().Msgf("env config file not found: %s", name)
+			default:
+				panic(fmt.Errorf("fatal error configs file: %w", err))
+			}
+		}
+	}
 
 	store = &viperStore{v}
 	// 防呆，viper 在高并发下有性能问题

@@ -65,7 +65,9 @@ func NewHertzServer() *hertzServer {
 	h.Use(recovery.Recovery())
 
 	h.GET("ping", pong)
+	h.GET("health", pong)
 	h.GET("healthcheck", pong)
+	h.GET("health_check", pong)
 
 	return &hertzServer{h}
 }

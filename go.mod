@@ -8,11 +8,12 @@ require (
 	github.com/cloudwego/hertz v0.6.0
 	github.com/hertz-contrib/logger/accesslog v0.0.0-20230206071608-2de215a9fd50
 	github.com/hertz-contrib/logger/zerolog v0.0.0-20230206071608-2de215a9fd50
+	github.com/json-iterator/go v1.1.12
 	github.com/redis/go-redis/v9 v9.0.2
 	github.com/rs/zerolog v1.29.0
 	github.com/smartystreets/goconvey v1.7.2
 	github.com/spf13/viper v1.15.0
-	github.com/weimob-tech/go-project-base v0.0.0-20230330065218-51c9a4de86ef
+	github.com/weimob-tech/go-project-base v0.0.0-20230331091325-ab23161af9f4
 	gorm.io/driver/mysql v1.4.7
 	gorm.io/gorm v1.24.6
 )
@@ -39,6 +40,8 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/nyaruka/phonenumbers v1.0.55 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/smartystreets/assertions v1.2.0 // indirect

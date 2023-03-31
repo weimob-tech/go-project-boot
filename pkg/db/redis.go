@@ -17,7 +17,7 @@ func NewRedis(ctx context.Context) (rdb *redis.Client, err error) {
 		DB:       config.GetInt("redis.database"),    // use default DB
 	})
 	// test redis connection
-	if "false" != config.GetString("redis.test") {
+	if config.GetString("redis.test") != "false" {
 		var result string
 		result, err = rdb.Ping(ctx).Result()
 		if err != nil {
@@ -25,6 +25,5 @@ func NewRedis(ctx context.Context) (rdb *redis.Client, err error) {
 		}
 		wlog.I().Str("result", result).Msg("redis ping result")
 	}
-
 	return rdb, nil
 }

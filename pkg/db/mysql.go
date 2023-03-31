@@ -19,7 +19,7 @@ func NewMysql(ctx context.Context) (db *gorm.DB, err error) {
 		db = db.Debug()
 	}
 	// enable connection test
-	if "false" != config.GetString("mysql.test") {
+	if config.GetString("mysql.test") != "false" {
 		err := db.WithContext(ctx).Exec(`select 1 = 1`).Error
 		if err != nil {
 			panic(fmt.Errorf("redis connection test failed: %w", err))
