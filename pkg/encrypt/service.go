@@ -3,6 +3,7 @@ package encrypt
 import (
 	"context"
 	"fmt"
+
 	"github.com/weimob-tech/go-project-base/pkg/codec"
 	"github.com/weimob-tech/go-project-base/pkg/config"
 	"github.com/weimob-tech/go-project-base/pkg/http"

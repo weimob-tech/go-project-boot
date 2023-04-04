@@ -3,6 +3,7 @@ package wcontext
 import (
 	"context"
 	"fmt"
+
 	"github.com/redis/go-redis/v9"
 	"github.com/weimob-tech/go-project-base/pkg/config"
 	"github.com/weimob-tech/go-project-boot/pkg/auth"
@@ -49,7 +50,6 @@ func Setup() {
 		ctx.redis = db
 	}
 	// setup oauth client
-	// todo: later
 	ctx.auth = &auth.OAuth{}
 }
 
