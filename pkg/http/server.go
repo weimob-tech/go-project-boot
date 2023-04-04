@@ -15,6 +15,8 @@ import (
 	"github.com/weimob-tech/go-project-boot/pkg/wlog"
 )
 
+var pathKey int
+
 type hertzServer struct {
 	*server.Hertz
 }
@@ -47,15 +49,25 @@ func NewHertzServer() *hertzServer {
 	logger := wlog.Logger.With().CallerWithSkipFrameCount(5).Logger()
 	hlog.SetLogger(hzero.From(logger, hzero.WithLevel(lvl)))
 
-	// inject zero-logger contextual
+	// inject contextual
 	h.Use(func(c context.Context, ctx *app.RequestContext) {
-		ctx.Next(logger.WithContext(c))
+		// create base contextual
+		cc := context.WithValue(c, &pathKey, ctx.FullPath())
+		// inject zero-logger
+		ctx.Next(logger.WithContext(cc))
 	})
 
 	// setup access logger
 	if config.GetBool("server.access-log") {
 		h.Use(accesslog.New(
 			accesslog.WithAccessLogFunc(func(c context.Context, f string, v ...interface{}) {
+				// skip healthcheck
+				path := c.Value(&pathKey).(string)
+				if path == "/health_check" || path == "/healthcheck" ||
+					path == "/health" || path == "/ping" {
+					return
+				}
+				// do log
 				hlog.Infof(f, v...)
 			}),
 		))
