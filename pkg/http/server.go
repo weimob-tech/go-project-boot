@@ -2,11 +2,12 @@ package http
 
 import (
 	"context"
+	"time"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/logger/accesslog"
-	"time"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -33,7 +34,7 @@ func NewHertzServer() *hertzServer {
 	// server default
 	config.SetDefault("server.readTimeout", 3*time.Minute)
 	config.SetDefault("server.writeTimeout", 3*time.Minute)
-	config.SetDefault("server.address", ":8888")
+	config.SetDefault("server.address", ":8080")
 	h := server.New(
 		server.WithReadTimeout(config.GetDuration("server.readTimeout")),
 		server.WithWriteTimeout(config.GetDuration("server.writeTimeout")),
