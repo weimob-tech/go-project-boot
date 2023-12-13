@@ -81,11 +81,7 @@ func RunAfterSetup(blk func()) Option {
 }
 
 func WithHttpServer() Option {
-	return func(c *Configure) {
-		c.NewServer = func() {
-			c.Server = httpBoot.NewHertzServer()
-		}
-	}
+	return WithHertzHttpServer()
 }
 
 func WithHttpServerFrom(server httpBase.Server) Option {
