@@ -23,11 +23,11 @@ var (
 	defaultPostStartHook = hook.ApplyPostStartHook
 )
 
-type Option func(c *configure)
+type Option func(c *Configure)
 
 type ServerOption func(s httpBase.Server)
 
-type configure struct {
+type Configure struct {
 	Server           httpBase.Server
 	BeforeSetup      func()
 	SetupConfig      func()
@@ -43,7 +43,7 @@ type configure struct {
 	PostStarterHook  func()
 }
 
-func configureFrom(opts ...Option) *configure {
+func configureFrom(opts ...Option) *Configure {
 	conf := defaultConfigure()
 	if len(opts) == 0 {
 		return conf
@@ -55,8 +55,8 @@ func configureFrom(opts ...Option) *configure {
 	return conf
 }
 
-func defaultConfigure() *configure {
-	return &configure{
+func defaultConfigure() *Configure {
+	return &Configure{
 		BeforeSetup:     func() {},
 		SetupConfig:     config.Setup,
 		SetupLog:        logBoot.Setup,
@@ -69,19 +69,19 @@ func defaultConfigure() *configure {
 }
 
 func RunBeforeSetup(blk func()) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.BeforeSetup = blk
 	}
 }
 
 func RunAfterSetup(blk func()) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.AfterSetup = blk
 	}
 }
 
 func WithHttpServer() Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.NewServer = func() {
 			c.Server = httpBoot.NewHertzServer()
 		}
@@ -89,19 +89,19 @@ func WithHttpServer() Option {
 }
 
 func WithHttpServerFrom(server httpBase.Server) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.Server = server
 	}
 }
 
 func WithHttpClient() Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.NewClient = defaultClientCreator
 	}
 }
 
 func WithHttpClientFrom(creator httpBase.HttpClientFactory) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.NewClient = func() {
 			httpBase.NewHttpClient = func() httpBase.Client {
 				return creator()
@@ -111,7 +111,7 @@ func WithHttpClientFrom(creator httpBase.HttpClientFactory) Option {
 }
 
 func ConfigureHttpServer(opts ...ServerOption) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.SetupServer = func() {
 			if c.Server == nil && len(opts) == 0 {
 				return
@@ -125,13 +125,13 @@ func ConfigureHttpServer(opts ...ServerOption) Option {
 }
 
 func WithStarter(starter ...BlockingStarter) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.BlockingStarters = append(c.BlockingStarters, starter...)
 	}
 }
 
 func WithJsonCodec(json codecBase.JsonCodec) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.NewCodec = func() {
 			codecBase.Json = json
 		}
@@ -139,7 +139,7 @@ func WithJsonCodec(json codecBase.JsonCodec) Option {
 }
 
 func WithLoggerFrom(l logBase.FullLogger) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.SetupLog = func() {
 			logBase.SetLogger(l)
 		}
@@ -147,13 +147,13 @@ func WithLoggerFrom(l logBase.FullLogger) Option {
 }
 
 func WithPreStartHook(fn func()) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.PreStarterHook = fn
 	}
 }
 
 func WithPostStartHook(fn func()) Option {
-	return func(c *configure) {
+	return func(c *Configure) {
 		c.PostStarterHook = fn
 	}
 }
