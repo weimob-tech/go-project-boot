@@ -19,10 +19,6 @@ import (
 
 var pathKey int
 
-type hertzConf struct {
-	opts []hconf.Option
-}
-
 type hertzServer struct {
 	*server.Hertz
 }
