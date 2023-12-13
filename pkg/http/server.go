@@ -10,6 +10,7 @@ import (
 	"github.com/hertz-contrib/logger/accesslog"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
+	hconf "github.com/cloudwego/hertz/pkg/common/config"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	hzero "github.com/hertz-contrib/logger/zerolog"
 	"github.com/weimob-tech/go-project-base/pkg/config"
@@ -30,16 +31,26 @@ func (s *hertzServer) GetServer() any {
 	return s.Hertz
 }
 
-func NewHertzServer() *hertzServer {
+func NewHertzServer(opts ...hconf.Option) *hertzServer {
 	// server default
 	config.SetDefault("server.readTimeout", 3*time.Minute)
 	config.SetDefault("server.writeTimeout", 3*time.Minute)
 	config.SetDefault("server.address", ":8080")
-	h := server.New(
+
+	// config timeout & port for default
+	defaultOpts := []hconf.Option{
 		server.WithReadTimeout(config.GetDuration("server.readTimeout")),
 		server.WithWriteTimeout(config.GetDuration("server.writeTimeout")),
 		server.WithHostPorts(config.GetString("server.address")),
-	)
+	}
+
+	// user custom opts
+	if len(opts) > 0 {
+		defaultOpts = append(defaultOpts, opts...)
+	}
+
+	// create hertz server
+	h := server.New(defaultOpts...)
 
 	// setup hertz logger
 	lvl := hlog.LevelInfo
